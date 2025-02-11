@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import ListGeneresWithProjects from "../../../GENRES/Presentation/Components/ListGeneresWithProjects";
 
 export default function Home() {
     return (
@@ -35,6 +36,8 @@ export default function Home() {
                     referrerPolicy="strict-origin-when-cross-origin" allowFullScreen>
                 </iframe>
             </div>
+
+            <ListGeneresWithProjects />
 
         </main>
     )
