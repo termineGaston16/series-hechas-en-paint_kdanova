@@ -14,7 +14,7 @@ export const getCategoriesByPage = async (
         const lastDocRef = doc(db, "CATEGORIAS", lastDocId);
         const lastDocSnapshot = await getDoc(lastDocRef);
 
-        if (!lastDocSnapshot.exists()) return [];
+        if (!lastDocSnapshot.exists()) throw new Error('!lastDocSnapshot.exists()');
 
         categoriesQuery = query(categoriesRef, startAfter(lastDocSnapshot), limit(limitSize));
     } else {
