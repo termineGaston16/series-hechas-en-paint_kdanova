@@ -10,6 +10,8 @@ export const getGenresByPage = async (
     const genresRef = collection(db, "GENEROS");
     let genresQuery;
 
+    if (limitSize <= 0) return [];
+
     if (lastDocId) {
         const lastDocRef = doc(db, "GENEROS", lastDocId);
         const lastDocSnapshot = await getDoc(lastDocRef);

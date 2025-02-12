@@ -2,7 +2,6 @@ import { useCallback, useEffect, useRef, useState } from "react"
 import { Genres_I } from "../../Domain/genres"
 import { useGetGenresByPage } from "../Hooks/useGetGenresByPage";
 import AnswerAsyncronous from "../../../UI/AnswerAsyncronous/Presentation/Component/AnswerAsyncronous";
-import { sortGenresByName } from "../../Application/genresAPP";
 
 export default function ListGeneresWithProjects() {
 
@@ -27,8 +26,9 @@ export default function ListGeneresWithProjects() {
         oberverRef.current = new IntersectionObserver((entries) => {
             if (entries[0].isIntersecting) {
                 setLastGenderID((prevID) => {
-                    const lastID = localGenres[localGenres.length - 1];
-                    return prevID !== lastID?.id ? lastID.id : prevID
+                    const lastID = [...localGenres].pop()?.id;
+                    if (prevID !== lastID && lastID) return lastID;
+                    return prevID;
                 })
             }
         }, {
@@ -44,36 +44,38 @@ export default function ListGeneresWithProjects() {
         if (lastGenderID) refetch();
     }, [lastGenderID]);
 
-    return (<>
-        <ul>
-            {localGenres.map((gender, index, array) => {
-                const isLast = index === array.length - 1;
-                const lowerCase = gender.gender.toLocaleLowerCase();
-                const firstCapitalLetter = lowerCase
-                    .replace(/^./, char => char.toLocaleUpperCase());
+    return (
+        <>
+            <ul>
+                {localGenres.map((gender, index, array) => {
+                    const isLast = index === array.length - 1;
+                    const lowerCase = gender.gender.toLocaleLowerCase();
+                    const firstCapitalLetter = lowerCase
+                        .replace(/^./, char => char.toLocaleUpperCase());
 
-                return (
-                    <li ref={isLast ? lastItem : null} key={gender.id}>
-                        <h6>{firstCapitalLetter}</h6>
-                        <hr />
-                    </li>
-                );
-            })}
-        </ul>
+                    return (
+                        <li ref={isLast ? lastItem : null} key={gender.id}>
+                            <h6>{firstCapitalLetter}</h6>
+                            <hr />
+                        </li>
+                    );
+                })}
+            </ul>
 
-        <AnswerAsyncronous
-            isError={isError}
-            isLoading={isLoading}
-            errorComponent={
-                <div>
-                    Error al obtener Géneros
-                </div>
-            }
-            loadingComponent={
-                <div>
-                    Obteniendo nuevos Géneros...
-                </div>
-            }
-        />
-    </>)
+            <AnswerAsyncronous
+                isError={isError}
+                isLoading={isLoading}
+                errorComponent={
+                    <div>
+                        Error al obtener Géneros
+                    </div>
+                }
+                loadingComponent={
+                    <div>
+                        Obteniendo nuevos Géneros...
+                    </div>
+                }
+            />
+        </>
+    )
 };

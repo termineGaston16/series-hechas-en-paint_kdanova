@@ -29,8 +29,9 @@ export default function ListCategoriesInHeader() {
         observerRef.current = new IntersectionObserver((entries) => {
             if (entries[0].isIntersecting) {
                 setLastCategoryID((prevID) => {
-                    const lastItem = categoriesLocal[categoriesLocal.length - 1];
-                    return prevID !== lastItem?.id ? lastItem?.id : prevID;
+                    const lastItem = [...categoriesLocal].pop()?.id;
+                    if (prevID !== lastItem && lastItem) return lastItem;
+                    return prevID;
                 });
             }
         }, {
@@ -84,5 +85,6 @@ export default function ListCategoriesInHeader() {
                 </div>
             }
         />
-    </>);
+    </>
+    );
 }

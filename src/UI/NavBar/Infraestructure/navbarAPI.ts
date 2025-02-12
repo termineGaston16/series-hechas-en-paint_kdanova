@@ -10,6 +10,8 @@ export const getCategoriesByPage = async (
     const categoriesRef = collection(db, "CATEGORIAS");
     let categoriesQuery;
 
+    if (limitSize <= 0) return [];
+
     if (lastDocId) {
         const lastDocRef = doc(db, "CATEGORIAS", lastDocId);
         const lastDocSnapshot = await getDoc(lastDocRef);
